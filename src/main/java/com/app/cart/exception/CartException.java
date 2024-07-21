@@ -1,9 +1,14 @@
 package com.app.cart.exception;
 
 public class CartException extends RuntimeException {
+    private final String code;
 
-    public CartException(String msg){
-        super(msg);
+    public CartException(String code, String message) {
+        super(message);
+        this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
 }

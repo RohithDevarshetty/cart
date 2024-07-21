@@ -1,21 +1,23 @@
 package com.app.cart.service;
 
 import com.app.cart.dto.CartDTO;
+import com.app.cart.dto.CartRequestDTO;
+import com.app.cart.dto.CartResponseDTO;
 import com.app.cart.entity.Cart;
+import com.app.cart.exception.CartException;
 
 import java.util.List;
 public interface CartService {
 
-    List<Cart> findAll();
-    Cart saveProducts(CartDTO cartDTO);
+    CartResponseDTO refreshCart(Long usedId);
+    Cart addProducts(CartRequestDTO cartRequestDTO) throws CartException;
 
-    Cart updateProduct(CartDTO CartDTO, Long id);
+    Cart updateProduct(CartRequestDTO cartRequestDTO);
 
-    void deleteProduct(Long id);
+    void deleteProduct(CartRequestDTO cartRequestDTO);
 
-    void clearCart(Object object);
+    void clearCart(Long userId);
 
-    List<Cart> findByPurchased();
+    void checkoutProducts(Long userId);
 
-    void checkoutProducts(Long id);
 }

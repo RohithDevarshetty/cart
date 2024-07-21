@@ -17,6 +17,12 @@ public class Cart implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "created")
+    private Date created;
+
+    @Column(name = "updated")
+    private Date updated;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
@@ -25,17 +31,23 @@ public class Cart implements Serializable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "stock")
+    @Column(name = "quantity")
     @NotNull
-    private Integer stock;
+    private Integer quantity;
 
-    @Column(name = "amount")
-    private Double amount;
+    @Column(name = "price")
+    private Double price;
 
-    @Column(name = "status")
-    private String status;
 
-    @Column(name = "date")
-    private Date date;
+    @PrePersist
+    protected void onCreate() {
+        created = new Date();
+        updated = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
 
 }

@@ -1,6 +1,9 @@
 package com.app.cart.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -8,76 +11,44 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
+@NoArgsConstructor
 public class Product implements Serializable {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Long id;
 
     @Column(name = "name")
+    @Getter
+    @Setter
     private String name;
 
     @Column(name = "description")
+    @Getter
+    @Setter
     private String description;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "stock_quantity")
+    @Getter
+    @Setter
+    private Integer stockQuantity;
 
     @Column(name = "unit_price")
+    @Getter
+    @Setter
     private Double unitPrice;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private Set<Cart> shoppingCarts = new HashSet<>();
 
-    public Product(){
-
-    }
-
-    public Product(Double unitPrice, Integer quantity, String description, String name) {
+    public Product(String name, Double unitPrice, Integer stock_quantity, String description) {
+        this.name = name;
         this.unitPrice = unitPrice;
-        this.quantity = quantity;
-        this.description = description;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
+        this.stockQuantity = stock_quantity;
         this.description = description;
     }
 
-    public Double getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(Double unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 }
