@@ -45,7 +45,6 @@ class ProductControllerTest {
 
         List<Product> result = productController.getAll();
 
-        // Then
         assertEquals(2, result.size());
         assertEquals("Product 1", result.get(0).getName());
         assertEquals("Product 2", result.get(1).getName());

@@ -1,5 +1,6 @@
 package com.app.cart.controller;
 
+import com.app.cart.dto.CartDTO;
 import com.app.cart.dto.CartRequestDTO;
 import com.app.cart.dto.CartResponseDTO;
 import com.app.cart.entity.Cart;
@@ -34,10 +35,10 @@ public class CartControllerTest {
     @Test
     public void testAddProductItem_Success() {
         CartRequestDTO cartRequestDTO = new CartRequestDTO();
-        Cart cart = new Cart();
+        CartDTO cart = new CartDTO();
         when(cartService.addProducts(any(CartRequestDTO.class))).thenReturn(cart);
 
-        Cart result = cartController.addProductItem(cartRequestDTO);
+        CartDTO result = cartController.addProductItem(cartRequestDTO);
 
         assertNotNull(result);
         verify(cartService, times(1)).addProducts(any(CartRequestDTO.class));
@@ -86,10 +87,10 @@ public class CartControllerTest {
     @Test
     public void testUpdateProductItem_Success() {
         CartRequestDTO cartRequestDTO = new CartRequestDTO();
-        Cart cart = new Cart();
+        CartDTO cart = new CartDTO();
         when(cartService.updateProduct(any(CartRequestDTO.class))).thenReturn(cart);
 
-        Cart result = cartController.updateProductItem(cartRequestDTO);
+        CartDTO result = cartController.updateProductItem(cartRequestDTO);
 
         assertNotNull(result);
         verify(cartService, times(1)).updateProduct(any(CartRequestDTO.class));

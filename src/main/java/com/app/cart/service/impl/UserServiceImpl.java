@@ -1,7 +1,9 @@
 package com.app.cart.service.impl;
 
+import com.app.cart.constants.ErrorCodes;
 import com.app.cart.dto.UserDTO;
 import com.app.cart.entity.User;
+import com.app.cart.exception.CartException;
 import com.app.cart.mapper.UserMapper;
 import com.app.cart.repository.UserRepository;
 import com.app.cart.service.UserService;
@@ -48,7 +50,11 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUser(Long userId){
         validatorUtil.validateUser(userId);
         Optional<User> userOptional = userRepository.findById(userId);
-        return userMapper.toDto(userOptional.get());
+        if(userOptional.isPresent())
+            return userMapper.toDto(userOptional.get());
+        else {
+            throw new CartException(ErrorCodes.INVALID_INPUT.getCode(), ErrorCodes.INVALID_INPUT.getMessage());
+        }
     }
 
 

@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorCodes {
     INVALID_USER("ERR001", "Invalid user ID: "),
     INVALID_INPUT("ERR003", "Invalid input"),
-    EMPTY_CART("ERR002", "Cart is empty for user ID: ");
+    EMPTY_CART("ERR002", "Cart is empty for user ID: "),
+    NO_STOCK("ERR003", "Selected more than stock available");
 
 
     private final String code;

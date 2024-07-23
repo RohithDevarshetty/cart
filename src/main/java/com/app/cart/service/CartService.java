@@ -10,9 +10,9 @@ import java.util.List;
 public interface CartService {
 
     CartResponseDTO refreshCart(Long usedId);
-    Cart addProducts(CartRequestDTO cartRequestDTO) throws CartException;
+    CartDTO addProducts(CartRequestDTO cartRequestDTO) throws CartException;
 
-    Cart updateProduct(CartRequestDTO cartRequestDTO);
+    CartDTO updateProduct(CartRequestDTO cartRequestDTO);
 
     void deleteProduct(CartRequestDTO cartRequestDTO);
 

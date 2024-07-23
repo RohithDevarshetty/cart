@@ -85,11 +85,11 @@ class CartServiceImplTest {
         when(cartMapper.toEntity(cartDTO)).thenReturn(cart);
         when(cartRepository.save(cart)).thenReturn(cart);
 
-        Cart result = cartService.addProducts(cartRequestDTO);
+        CartDTO result = cartService.addProducts(cartRequestDTO);
 
         assertNotNull(result);
-        assertEquals(userId, result.getUser().getId());
-        assertEquals(productId, result.getProduct().getId());
+        assertEquals(userId, result.getUserId());
+        assertEquals(productId, result.getProductId());
         assertEquals(quantity, result.getQuantity());
         assertEquals(product.getUnitPrice(), result.getPrice());
         verify(cartRepository, times(1)).save(any(Cart.class));

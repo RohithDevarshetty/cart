@@ -40,8 +40,11 @@ public class CartServiceImpl implements CartService {
         this.userService = userService;
     }
 
-    public Cart addProducts(CartRequestDTO cartRequestDTO) throws CartException {
+    public CartDTO addProducts(CartRequestDTO cartRequestDTO) throws CartException {
         validatorUtil.validateUser(cartRequestDTO.getUserId());
+        if(cartRequestDTO.getQuantity()<=0){
+            throw new CartException(ErrorCodes.INVALID_INPUT.getCode(), ErrorCodes.INVALID_INPUT.getMessage());
+        }
         Optional<Product> productOptional = productRepository.findById(cartRequestDTO.getProductId());
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -51,6 +54,9 @@ public class CartServiceImpl implements CartService {
             if(cartOptional.isPresent()){
                 Cart cart = cartOptional.get();
                 cartDTO = cartMapper.toDto(cart);
+                if(cartRequestDTO.getQuantity() + cartDTO.getQuantity() > product.getStockQuantity()){
+                    throw new CartException(ErrorCodes.NO_STOCK.getCode(), ErrorCodes.NO_STOCK.getMessage());
+                }
                 cartDTO.setQuantity(cartRequestDTO.getQuantity() + cartDTO.getQuantity());
                 cartDTO.setPrice(product.getUnitPrice());
             }
@@ -63,7 +69,7 @@ public class CartServiceImpl implements CartService {
             }
             Cart savedCart = cartRepository.save(cartMapper.toEntity(cartDTO));
             log.info("Saved Card {}", savedCart);
-            return savedCart;
+            return cartMapper.toDto(savedCart);
         } else {
             log.error("Error while processing {}", cartRequestDTO);
             throw new CartException(ErrorCodes.INVALID_INPUT.getCode(), ErrorCodes.INVALID_INPUT.getMessage());
@@ -87,19 +93,27 @@ public class CartServiceImpl implements CartService {
         return cartResponseDTO;
     }
 
-    public Cart updateProduct(CartRequestDTO cartRequestDTO) {
+    public CartDTO updateProduct(CartRequestDTO cartRequestDTO) {
         validatorUtil.validateUser(cartRequestDTO.getUserId());
         if(cartRequestDTO.getQuantity() <=0){
             throw new CartException(ErrorCodes.INVALID_INPUT.getCode(), ErrorCodes.INVALID_INPUT.getMessage());
         }
         Optional<Cart> updateItem = cartRepository.findByProductIdAndUserId(cartRequestDTO.getProductId(), cartRequestDTO.getUserId());
-        Cart item = new Cart();
-        if (updateItem.isPresent()) {
+        Optional<Product> productOptional = productRepository.findById(cartRequestDTO.getProductId());
+        Cart item;
+        if (updateItem.isPresent() && productOptional.isPresent()) {
+            Product product = productOptional.get();
             item = updateItem.get();
+            if(cartRequestDTO.getQuantity() > product.getStockQuantity()){
+                throw new CartException(ErrorCodes.NO_STOCK.getCode(), ErrorCodes.NO_STOCK.getMessage());
+            }
             item.setQuantity(cartRequestDTO.getQuantity());
             item.setPrice(item.getProduct().getUnitPrice());
+        }else{
+            throw new CartException(ErrorCodes.INVALID_INPUT.getCode(), ErrorCodes.INVALID_INPUT.getMessage());
         }
-        return cartRepository.save(item);
+        Cart savedCart = cartRepository.save(item);
+        return cartMapper.toDto(savedCart);
     }
 
     public void deleteProduct(CartRequestDTO cartRequestDTO) {

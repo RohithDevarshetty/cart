@@ -1,5 +1,6 @@
 package com.app.cart.controller;
 
+import com.app.cart.dto.CartDTO;
 import com.app.cart.dto.CartRequestDTO;
 import com.app.cart.dto.CartResponseDTO;
 import com.app.cart.entity.Cart;
@@ -37,7 +38,7 @@ public class CartController {
             description = "Add a new product item to the cart using the provided CartRequestDTO"
     )
     @RequestMapping(value = "/add-item", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public Cart addProductItem(
+    public CartDTO addProductItem(
             @Parameter(description = "DTO containing product details to be added to the cart", required = true)
             @RequestBody CartRequestDTO cartRequestDTO) {
         try {
@@ -71,7 +72,7 @@ public class CartController {
      */
     @Operation(summary = "Update product item in cart", description = "Update specific product item in the cart")
     @RequestMapping(value = "/update-item", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public Cart updateProductItem(
+    public CartDTO updateProductItem(
             @Parameter(description = "Cart DTO with updated details", required = true) @RequestBody CartRequestDTO cartRequestDTO) {
         try {
             return cartService.updateProduct(cartRequestDTO);
@@ -116,7 +117,7 @@ public class CartController {
     @Operation(
             summary = "Clear cart items for a user",
             description = "Removes all items from the cart of the user identified by the given user ID",
-            parameters = @Parameter(name = "id", description = "ID of the user whose cart is to be cleared", required = true)
+            parameters = @Parameter(name = "userId", description = "ID of the user whose cart is to be cleared", required = true)
     )
     @RequestMapping(value = "clear/{userId}", method = RequestMethod.DELETE)
     public void clearCart(
