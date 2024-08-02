@@ -1,15 +1,15 @@
 package com.app.cart.service.impl;
 
-import com.app.cart.dto.CartDTO;
+import com.app.cart.dto.CartItemDTO;
 import com.app.cart.dto.CartRequestDTO;
 import com.app.cart.dto.CartResponseDTO;
 import com.app.cart.dto.UserDTO;
-import com.app.cart.entity.Cart;
+import com.app.cart.entity.CartItem;
 import com.app.cart.entity.Product;
 import com.app.cart.entity.User;
 import com.app.cart.exception.CartException;
 import com.app.cart.constants.ErrorCodes;
-import com.app.cart.mapper.CartMapper;
+import com.app.cart.mapper.CartItemMapper;
 import com.app.cart.repository.CartRepository;
 import com.app.cart.repository.ProductRepository;
 import com.app.cart.service.UserService;
@@ -35,7 +35,7 @@ class CartServiceImplTest {
     private ProductRepository productRepository;
 
     @Mock
-    private CartMapper cartMapper;
+    private CartItemMapper cartItemMapper;
 
     @Mock
     private ValidatorUtil validatorUtil;
@@ -68,31 +68,31 @@ class CartServiceImplTest {
         User user = new User();
         user.setId(userId);
 
-        CartDTO cartDTO = new CartDTO();
-        cartDTO.setUserId(userId);
-        cartDTO.setProductId(productId);
-        cartDTO.setQuantity(quantity);
-        cartDTO.setPrice(product.getUnitPrice());
+        CartItemDTO cartItemDTO = new CartItemDTO();
+        cartItemDTO.setUserId(userId);
+        cartItemDTO.setProductId(productId);
+        cartItemDTO.setQuantity(quantity);
+        cartItemDTO.setPrice(product.getUnitPrice());
 
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setProduct(product);
-        cart.setQuantity(quantity);
-        cart.setPrice(product.getUnitPrice());
+        CartItem cartItem = new CartItem();
+        cartItem.setUser(user);
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItem.setPrice(product.getUnitPrice());
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(cartRepository.findByProductIdAndUserId(productId, userId)).thenReturn(Optional.empty());
-        when(cartMapper.toDto(any(Cart.class))).thenReturn(cartDTO);
-        when(cartMapper.toEntity(cartDTO)).thenReturn(cart);
-        when(cartRepository.save(cart)).thenReturn(cart);
+        when(cartItemMapper.toDto(any(CartItem.class))).thenReturn(cartItemDTO);
+        when(cartItemMapper.toEntity(cartItemDTO)).thenReturn(cartItem);
+        when(cartRepository.save(cartItem)).thenReturn(cartItem);
 
-        CartDTO result = cartService.addProducts(cartRequestDTO);
+        CartItemDTO result = cartService.addProducts(cartRequestDTO);
 
         assertNotNull(result);
         assertEquals(userId, result.getUserId());
         assertEquals(productId, result.getProductId());
         assertEquals(quantity, result.getQuantity());
         assertEquals(product.getUnitPrice(), result.getPrice());
-        verify(cartRepository, times(1)).save(any(Cart.class));
+        verify(cartRepository, times(1)).save(any(CartItem.class));
     }
 
     @Test
@@ -111,7 +111,7 @@ class CartServiceImplTest {
 
         assertEquals(ErrorCodes.INVALID_INPUT.getCode(), exception.getCode());
         assertEquals(ErrorCodes.INVALID_INPUT.getMessage(), exception.getMessage());
-        verify(cartRepository, never()).save(any(Cart.class));
+        verify(cartRepository, never()).save(any(CartItem.class));
     }
 
     @Test
@@ -121,23 +121,23 @@ class CartServiceImplTest {
         userDTO.setId(userId);
         userDTO.setName("User Name");
 
-        Cart cart = new Cart();
-        cart.setQuantity(5);
-        cart.setPrice(10.0);
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(5);
+        cartItem.setPrice(10.0);
 
-        CartDTO cartDTO = new CartDTO();
-        cartDTO.setQuantity(5);
-        cartDTO.setPrice(10.0);
+        CartItemDTO cartItemDTO = new CartItemDTO();
+        cartItemDTO.setQuantity(5);
+        cartItemDTO.setPrice(10.0);
 
         CartResponseDTO cartResponseDTO = new CartResponseDTO();
         cartResponseDTO.setUser(userDTO);
-        cartResponseDTO.setProductList(List.of(cartDTO));
+        cartResponseDTO.setProductList(List.of(cartItemDTO));
         cartResponseDTO.setCartPrice(50.0);
 
         when(validatorUtil.validateUser(userId)).thenReturn(true);
         when(userService.getUser(userId)).thenReturn(userDTO);
-        when(cartRepository.findAllByUserId(userId)).thenReturn(List.of(cart));
-        when(cartMapper.toDto(cart)).thenReturn(cartDTO);
+        when(cartRepository.findAllByUserId(userId)).thenReturn(List.of(cartItem));
+        when(cartItemMapper.toDto(cartItem)).thenReturn(cartItemDTO);
 
         CartResponseDTO result = cartService.refreshCart(userId);
 
@@ -163,14 +163,14 @@ class CartServiceImplTest {
     @Test
     void testClearCart_Success() {
         Long userId = 1L;
-        Cart cart = new Cart();
+        CartItem cartItem = new CartItem();
         when(validatorUtil.validateUser(userId)).thenReturn(true);
-        when(cartRepository.findAllByUserId(userId)).thenReturn(List.of(cart));
-        doNothing().when(cartRepository).deleteAll(List.of(cart));
+        when(cartRepository.findAllByUserId(userId)).thenReturn(List.of(cartItem));
+        doNothing().when(cartRepository).deleteAll(List.of(cartItem));
 
         cartService.clearCart(userId);
 
-        verify(cartRepository, times(1)).deleteAll(List.of(cart));
+        verify(cartRepository, times(1)).deleteAll(List.of(cartItem));
     }
 
     @Test

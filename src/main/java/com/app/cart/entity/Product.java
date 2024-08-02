@@ -42,7 +42,7 @@ public class Product implements Serializable {
     private Double unitPrice;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-    private Set<Cart> shoppingCarts = new HashSet<>();
+    private Set<CartItem> shoppingCarts = new HashSet<>();
 
     public Product(String name, Double unitPrice, Integer stock_quantity, String description) {
         this.name = name;

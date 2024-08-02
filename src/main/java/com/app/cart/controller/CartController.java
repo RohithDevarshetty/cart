@@ -1,9 +1,8 @@
 package com.app.cart.controller;
 
-import com.app.cart.dto.CartDTO;
+import com.app.cart.dto.CartItemDTO;
 import com.app.cart.dto.CartRequestDTO;
 import com.app.cart.dto.CartResponseDTO;
-import com.app.cart.entity.Cart;
 import com.app.cart.exception.CartException;
 import com.app.cart.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,7 @@ public class CartController {
      * Add a new product item to the cart.
      *
      * @param cartRequestDTO the DTO containing details of the product to add to the cart
-     * @return the updated Cart object
+     * @return the updated CartItem object
      * @throws CartException if there is an issue adding the product to the cart
      */
     @Operation(
@@ -38,7 +37,7 @@ public class CartController {
             description = "Add a new product item to the cart using the provided CartRequestDTO"
     )
     @RequestMapping(value = "/add-item", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public CartDTO addProductItem(
+    public CartItemDTO addProductItem(
             @Parameter(description = "DTO containing product details to be added to the cart", required = true)
             @RequestBody CartRequestDTO cartRequestDTO) {
         try {
@@ -52,7 +51,10 @@ public class CartController {
         }
     }
 
-
+    @Operation(
+            summary = "refresh and get latest cart",
+            description = "after any operation, if cart is invalidated, refresh can be called to get latest status"
+    )
     @RequestMapping(value = "/refresh/{userId}", method = RequestMethod.GET, produces = "application/json")
     public CartResponseDTO refreshCart(@Parameter(description = "ID of the user whose cart needs to be fetched", required = true) @PathVariable("userId") Long userId) {
         try {
@@ -72,8 +74,8 @@ public class CartController {
      */
     @Operation(summary = "Update product item in cart", description = "Update specific product item in the cart")
     @RequestMapping(value = "/update-item", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public CartDTO updateProductItem(
-            @Parameter(description = "Cart DTO with updated details", required = true) @RequestBody CartRequestDTO cartRequestDTO) {
+    public CartItemDTO updateProductItem(
+            @Parameter(description = "CartItem DTO with updated details", required = true) @RequestBody CartRequestDTO cartRequestDTO) {
         try {
             return cartService.updateProduct(cartRequestDTO);
         } catch (CartException e) {
@@ -97,7 +99,7 @@ public class CartController {
     )
     @RequestMapping(method = RequestMethod.DELETE, value = "/remove-item", consumes = "application/json")
     public void removeItem(
-            @Parameter(description = "Cart DTO with details", required = true) @RequestBody CartRequestDTO cartRequestDTO) {
+            @Parameter(description = "CartItem DTO with details", required = true) @RequestBody CartRequestDTO cartRequestDTO) {
         try {
             cartService.deleteProduct(cartRequestDTO);
         } catch (CartException e) {

@@ -1,10 +1,8 @@
 package com.app.cart.controller;
 
-import com.app.cart.dto.CartDTO;
+import com.app.cart.dto.CartItemDTO;
 import com.app.cart.dto.CartRequestDTO;
 import com.app.cart.dto.CartResponseDTO;
-import com.app.cart.entity.Cart;
-import com.app.cart.exception.CartException;
 import com.app.cart.service.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,10 +33,10 @@ public class CartControllerTest {
     @Test
     public void testAddProductItem_Success() {
         CartRequestDTO cartRequestDTO = new CartRequestDTO();
-        CartDTO cart = new CartDTO();
+        CartItemDTO cart = new CartItemDTO();
         when(cartService.addProducts(any(CartRequestDTO.class))).thenReturn(cart);
 
-        CartDTO result = cartController.addProductItem(cartRequestDTO);
+        CartItemDTO result = cartController.addProductItem(cartRequestDTO);
 
         assertNotNull(result);
         verify(cartService, times(1)).addProducts(any(CartRequestDTO.class));
@@ -87,10 +85,10 @@ public class CartControllerTest {
     @Test
     public void testUpdateProductItem_Success() {
         CartRequestDTO cartRequestDTO = new CartRequestDTO();
-        CartDTO cart = new CartDTO();
+        CartItemDTO cart = new CartItemDTO();
         when(cartService.updateProduct(any(CartRequestDTO.class))).thenReturn(cart);
 
-        CartDTO result = cartController.updateProductItem(cartRequestDTO);
+        CartItemDTO result = cartController.updateProductItem(cartRequestDTO);
 
         assertNotNull(result);
         verify(cartService, times(1)).updateProduct(any(CartRequestDTO.class));

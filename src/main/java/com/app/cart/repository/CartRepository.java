@@ -1,14 +1,14 @@
 package com.app.cart.repository;
 
-import com.app.cart.entity.Cart;
+import com.app.cart.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<CartItem, Long> {
 
-    List<Cart> findAllByUserId(Long id);
+    List<CartItem> findAllByUserId(Long id);
 
-    Optional<Cart> findByProductIdAndUserId(Long productId, Long userId);
+    Optional<CartItem> findByProductIdAndUserId(Long productId, Long userId);
 }

@@ -31,7 +31,7 @@ public class User implements Serializable {
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<Cart> carts = new HashSet<>();
+    private Set<CartItem> cart = new HashSet<>();
 
     public User(String name, String email) {
         this.name = name;

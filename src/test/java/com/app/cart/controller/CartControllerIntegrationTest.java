@@ -1,8 +1,6 @@
 package com.app.cart.controller;
 
 import com.app.cart.dto.CartRequestDTO;
-import com.app.cart.dto.CartResponseDTO;
-import com.app.cart.entity.Cart;
 import com.app.cart.repository.CartRepository;
 import com.app.cart.service.CartService;
 import com.fasterxml.jackson.databind.ObjectMapper;

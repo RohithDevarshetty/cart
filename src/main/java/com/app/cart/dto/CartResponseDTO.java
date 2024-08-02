@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class CartResponseDTO {
     UserDTO user;
-    List<CartDTO> productList;
+    List<CartItemDTO> productList;
     Double cartPrice;
 
 }

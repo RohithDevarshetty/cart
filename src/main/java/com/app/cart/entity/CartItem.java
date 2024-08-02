@@ -9,8 +9,8 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "cart")
-public class Cart implements Serializable {
+@Table(name = "cart_item")
+public class CartItem implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

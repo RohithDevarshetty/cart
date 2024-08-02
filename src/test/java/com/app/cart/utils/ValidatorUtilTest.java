@@ -1,7 +1,7 @@
 package com.app.cart.utils;
 
 import com.app.cart.constants.ErrorCodes;
-import com.app.cart.entity.Cart;
+import com.app.cart.entity.CartItem;
 import com.app.cart.entity.User;
 import com.app.cart.exception.CartException;
 import com.app.cart.repository.CartRepository;
@@ -71,7 +71,7 @@ public class ValidatorUtilTest {
 
     @Test
     public void testValidateCartNotEmpty_NonEmptyCart_DoesNotThrowException() {
-        when(cartRepository.findAllByUserId(anyLong())).thenReturn(List.of(new Cart()));
+        when(cartRepository.findAllByUserId(anyLong())).thenReturn(List.of(new CartItem()));
 
         validatorUtil.validateCartNotEmpty(1L);
     }

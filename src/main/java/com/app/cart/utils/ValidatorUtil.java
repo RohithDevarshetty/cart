@@ -1,7 +1,7 @@
 package com.app.cart.utils;
 
 import com.app.cart.constants.ErrorCodes;
-import com.app.cart.entity.Cart;
+import com.app.cart.entity.CartItem;
 import com.app.cart.exception.CartException;
 import com.app.cart.repository.CartRepository;
 import com.app.cart.repository.UserRepository;
@@ -28,8 +28,8 @@ public class ValidatorUtil {
     }
 
     public void validateCartNotEmpty(Long userId) throws CartException {
-        List<Cart> cartList = cartRepository.findAllByUserId(userId);
-        if (cartList.isEmpty()) {
+        List<CartItem> cartItemList = cartRepository.findAllByUserId(userId);
+        if (cartItemList.isEmpty()) {
             throw new CartException(ErrorCodes.EMPTY_CART.getCode(), ErrorCodes.EMPTY_CART.getMessage() + userId);
         }
     }

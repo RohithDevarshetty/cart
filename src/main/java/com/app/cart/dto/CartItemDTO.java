@@ -1,6 +1,5 @@
 package com.app.cart.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,7 +7,7 @@ import java.util.Date;
 
 
 @Data
-public class CartDTO implements Serializable {
+public class CartItemDTO implements Serializable {
 
     private Long id;
     private Long userId;
