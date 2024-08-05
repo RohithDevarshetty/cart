@@ -85,7 +85,7 @@ CREATE TABLE `users` (
 `created` timestamp
 );
 
-CREATE TABLE `cart` (
+CREATE TABLE `cart_item` (
 `id` integer,
 `user_id` integer,
 `product_id` integer,
